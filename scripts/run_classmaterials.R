@@ -24,9 +24,9 @@ library(here)
 # source("./scripts/data.R")
 
 ######MAKE OUTPUTS########
-rmarkdown::render(here("scripts","Lesson.Rmd"), 
+rmarkdown::render(here("rscripts","Lesson.Rmd"), 
                   output_dir = here("lesson"), 
-                  output_file = "Lesson.pdf")
+                  output_file = "Lesson.nb.html")
 
 rmarkdown::render(here("scripts","Homework.Rmd"), 
                   output_dir = here("lesson"), 
