@@ -1,0 +1,222 @@
+---
+title: "FishR 101 -- Functions"
+subtitle: "`r title0 `"
+author: "Instructor: Emily Markowitz (Emily.Markowitz@noaa.gov)"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+    toc_depth: 2
+    df_print: kable
+---
+
+```{r setup, include=FALSE, error=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      error = FALSE, message = FALSE, 
+                      tinytex.verbose = TRUE)
+
+library(knitr)
+library(ggplot2)
+library(showtext)
+library(magrittr)
+```
+
+\newpage
+
+**`r ifelse(echoTF == TRUE, "Answers to ", "") `Questions: **
+
+First, load your libraries!
+
+```{r, echo = TRUE, eval = TRUE}
+library(tidyverse)
+library(here)
+```
+
+
+NOTE: For this homework, also refer to the PDF version. 
+There are helpful graphics included in the PDF version!
+
+# If-else statements
+
+
+## Performance: was this a good trawl?
+
+```{r, echo = FALSE, eval=FALSE}
+# conditions <- data.frame(weather = c("exellent", "good", "fair", "poor"), 
+#                          touch_bottom = c("always", "always", "almost always", "variable"),
+#                          performance = c(0, 0, 1, -1))
+```
+
+If the weather is `excellent` or `good`, the peformance of the trawl is `0`
+if the weather is `fair`, the peformance of the trawl is `1`
+if the weather is `poor`, the peformance of the trawl is `-1`
+
+Write the following as an: 
+
+ - if() / if()}else{} / if()}else if(){} statement (whichever you see fit), 
+ - in an ifelse() function, 
+ - using dplyr::if_else(), and 
+ - using dplyr::case_when()
+
+Test your scripts with for the first two bullets (if-else statement, ifelse())
+
+```{r, echo = TRUE}
+weather <- "good"
+```
+
+Test your scripts with for the second - fourth bullet (ifelse(), if_else(), case_when())
+
+```{r, echo = TRUE}
+dat<-data.frame(weather = c("excellent", "good", "fair", "poor"))
+```
+
+Which do you think is the most sensible approach?
+
+```{r, echo = echoTF,eval=echoTF }
+####  - if() / if()}else{} / if()}else if(){} statement (whichever you see fit), 
+if (weather %in% c("excellent", "good")) {
+  performance <- 0
+} else if (weather == "fair") {
+  performance <- 1
+} else if (weather == "poor") {
+  performance <- -1
+}
+performance
+
+# alternatively: 
+if (weather == "excellent" | weather == "good") {
+  performance <- 0
+} else if (weather == "fair") {
+  performance <- 1
+} else {
+  performance <- -1
+}
+performance
+```
+
+
+```{r, echo = echoTF,eval=echoTF }
+#  - in an ifelse() function,  
+
+# with one variable
+performance<-ifelse(weather %in% c("excellent", "good"), 0, 
+                    ifelse(weather %in% "fair", 1, 
+                           ifelse(weather %in% "poor", -1, NA)))
+performance
+
+# alternitively
+performance<-ifelse(weather %in% c("excellent", "good"), 0, 
+                    ifelse(weather %in% "fair", 1, -1))
+performance
+
+# with a data.frame
+performance<-ifelse(dat$weather %in% c("excellent", "good"), 0, 
+                    ifelse(dat$weather %in% "fair", 1, 
+                           ifelse(dat$weather %in% "poor", -1, NA)))
+performance
+```
+
+```{r, echo = echoTF,eval=echoTF }
+#  - using dplyr::if_else(), and 
+dat1 <- dat %>% 
+  dplyr::mutate(performance =
+                  dplyr::if_else(weather %in% c("excellent", "good"), 0, 
+                    dplyr::if_else(weather %in% "fair", 1, -1)))
+dat1
+```
+
+```{r, echo = echoTF,eval=echoTF }
+dat1<-dat %>%
+  dplyr::mutate(performance =
+                  dplyr::if_else(weather %in% c("excellent", "good"), 0,
+                                 dplyr::if_else(weather %in% "fair", 1, 
+                                                -1)))
+dat1
+```
+
+```{r, echo = echoTF,eval=echoTF }
+#  - using dplyr::case_when()
+dat1<-dat %>%
+  dplyr::mutate(performance =
+                  dplyr::case_when(weather %in% c("excellent", "good") ~ 0,
+                                   weather %in% "fair" ~ 1, 
+                                   weather %in% "poor" ~ -1))
+dat1
+```
+
+```{r, echo = echoTF,eval=echoTF }
+# Which do you think is the most sensible approach?
+# I would argue that the dplyr::case_when() is the cleanest solution, 
+# but as you can see, they all work!
+# Whichever one suits your fancy. 
+```
+
+# For loops
+
+## Improve the following code by putting it into a for loop!
+
+Let's use a for loop to estimate the average the result of a roll of a die.
+
+```{r, echo  = TRUE}
+nsides = 6
+ntrials = 1000
+```
+
+A non-loop version of this for the first variable would be: 
+
+```{r, echo  = TRUE}
+trials <- c()
+j <- 1
+trials <- c(trials, sample(1:nsides,1))
+trials
+# once you write your loop, you can use the following to calcuale the average the result of a roll of a die.  
+mean(trials) # NOTE: because we are taking a random sample (sample()) you will not get the same answer that I get in the solutions. Here it is important to be in the ballpark!
+```
+
+```{r, echo = echoTF,eval=echoTF}
+for (j in 1:ntrials) {
+  trials <- c(trials, 
+             sample(1:nsides,1))  # We get one sample at a time
+}
+head(trials)
+mean(trials) # NOTE: because we are taking a random sample (sample()) you will not get the same answer that I get in the solutions. Here it is important to be in the ballpark!)
+```
+
+
+# Extra Credit
+
+Change the the below for loop from the lecture into 4 tidyverse lines with no loop: 
+```{r, echo = TRUE}
+
+EBS_haul_table<-read_csv(here::here("data", "ebs_2017-2018.csv"))
+
+EBS_summary<-EBS_haul_table %>% # use EBS data to create object "EBS_summary"
+  dplyr::group_by(YEAR, STRATUM, COMMON) %>% # Group by YEAR, STRATUM, COMMON for next command
+  dplyr::summarise(WTCPUE_sum = sum(WTCPUE, na.rm = TRUE)) # sum WTCPUE across grouped items above
+
+unique_yr_strat<-EBS_summary %>% 
+  dplyr::select("YEAR", "STRATUM") %>% 
+  distinct()
+
+unique_yr_strat
+
+max_5_spp<-NULL
+
+for (i in 1:nrow(unique_yr_strat)){
+  
+  # basically use the same code you had above, but with iterative, not fixed, 
+  # variables for year and stratum 
+  # max_5_spp0 <- NULL
+  max_5_spp0 <- EBS_summary %>%
+    dplyr::filter(YEAR == unique_yr_strat$YEAR[i], 
+                  STRATUM == unique_yr_strat$STRATUM[i]) %>% 
+    dplyr::arrange(-WTCPUE_sum) %>%
+    dplyr::top_n(n = 5)
+  
+  max_5_spp<-bind_rows(max_5_spp, 
+                       max_5_spp0)
+}
+
+max_5_spp
+```
