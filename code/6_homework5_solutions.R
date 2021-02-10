@@ -1,8 +1,8 @@
-# Homework 4: Data wrangling and manipulation with tidyverse
-# Created by: 
-# Contact: 
-# Created: 
-# Modified: 
+# Homework 6: Functions Part 2
+# Created by: Emily Markowitz
+# Contact: Emily.Markowitz@noaa.gov
+# Created: 2020-12-18
+# Modified: 2021-02-08
 
 
 # packages ----------------------------------------------------------------

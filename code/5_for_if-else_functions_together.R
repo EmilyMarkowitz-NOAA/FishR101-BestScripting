@@ -1,4 +1,4 @@
-# Lesson 5: Loops and functions
+# Homework 6: Functions Part 2
 # 1_setup.R
 # Created by: Emily Markowitz
 # Contact: Emily.Markowitz@noaa.gov

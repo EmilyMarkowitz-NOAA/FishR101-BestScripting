@@ -28,10 +28,10 @@ echoTF<-FALSE
 title0<-"Homework"
 rmarkdown::render(here("code","homework-solutions.Rmd"), 
                   output_dir = here("code"), 
-                  output_file = "6_homework5.pdf")
+                  output_file = "6_homework6.pdf")
 
 echoTF<-TRUE
 title0<-"Homework Answers"
 rmarkdown::render(here("code","homework-solutions.Rmd"), 
                   output_dir = here("code"), 
-                  output_file = "6_homework5-solutions.pdf")
+                  output_file = "6_homework6-solutions.pdf")
