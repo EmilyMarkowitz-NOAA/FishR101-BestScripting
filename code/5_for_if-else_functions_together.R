@@ -138,3 +138,4 @@ priceCalculator <- function(hours, pph=40){
 
 priceCalculator(hours = 55)
 priceCalculator(hours = 110)
+

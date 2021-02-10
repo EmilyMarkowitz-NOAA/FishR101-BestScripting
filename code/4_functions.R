@@ -16,13 +16,14 @@ library(here)
 # directories --------------------------------------------------------------------
 # 
 # source(here("functions", "file_folders.R")) (already done in script 1_*.R)
-# 
+
 # download data --------------------------------------------------------------------
-# EBS_haul_table<-read_csv(here::here("data", "ebs_2017-2018.csv"))
-# 
+
+EBS_haul_table<-read_csv(here::here("data", "ebs_2017-2018.csv"))
+
 # look at your data -------------------------------------------------------
-# 
-# str(EBS_haul_table)
+
+str(EBS_haul_table)
 
 # Explore functions --------------------------
 
@@ -213,6 +214,51 @@ max5spp(EBS_summary = EBS_summary,
         yr = 2016, 
         strat = 10) 
 
+# ***Default options in functions --------
+
+# Sometimes when we have a 'favorite value' for something, it can be useful to 
+# make the item an argument, but pre-define it in the function itself as a default.
+# Admittedly not the best example, but let's say that we typically only run 
+# this funciton in 2016, but we want to make it possible to run it in other years too
+
+max5spp <- function (EBS_summary, 
+                     yr = 2016, # A default value you can override later
+                     strat){ 
+  # named this max5spp to be different from the data.frame object we have saved
+  
+  # basically use the same code you had above, 
+  # but now with variables from the function where 
+  # unique_yr_strat$YEAR[i] and unique_yr_strat$STRATUM[i] where 
+  max_5_spp0 <- EBS_summary %>%
+    dplyr::filter(YEAR == yr, 
+                  STRATUM == strat) %>% 
+    dplyr::arrange(-WTCPUE_sum) %>%
+    dplyr::top_n(n = 5)
+  
+  return(list("max_5_spp" = max_5_spp0[1:5,], 
+              "EBS_summary" = EBS_summary, 
+              "yr" = yr, 
+              "strat" = strat))
+}
+
+# here we let the default stand
+max5spp(EBS_summary = EBS_summary, 
+        strat = 10) 
+
+# here we override the default
+max5spp(EBS_summary = EBS_summary, 
+        yr = 2017,
+        strat = 10) 
+
+# ***Order of arguments when calling function --------
+
+# Note that the order of your arguments doesn't matter as long as you are 
+# explicit about what argument you are talking about
+
+max5spp(strat = 10, 
+        EBS_summary = EBS_summary,
+        yr = 2016) 
+
 # Best Practices: using the roxygen skeleton ------------------
 
 # Now, let's talk about how to document our functions!
@@ -256,7 +302,6 @@ max5spp <- function (EBS_summary, yr, strat){
 # Besides being incredibly helpful to future you as you try to figure out what you did, 
 # this can be helpful when you reach the next stage of R enlightenment and begin 
 # creating your own packages and sharing code with colleagues and for public consumption
-
 
 # You'll have lots of chances in the homework to practice documenting code!
 
