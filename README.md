@@ -1,4 +1,4 @@
-# FishR101-BestScripting
+# FishR101-Functions2
 
 This is one of the lessons for the Jan-Feb 2021 R Workshop for Resource Assessment and Conservation Engineering Division (RACE) Groundfish Assessment Program (GAP).
 
