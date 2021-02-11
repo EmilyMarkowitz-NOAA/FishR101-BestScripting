@@ -1,11 +1,4 @@
 # Homework 6: Functions Part 2
-# Created by: 
-# Contact: 
-# Created: 
-# Modified: 
-
-
-# Homework 6: Functions Part 2
 # Created by: Emily Markowitz
 # Contact: Emily.Markowitz@noaa.gov
 # Created: 2020-12-18
@@ -51,25 +44,7 @@ library(janitor)
 
 #***ANSWER--------------
 
-#' The Pythagorean Theorem
-#'
-#' @param a1 A numberic or a vector. The first leg of a right triangle. 
-#' @param b1 A numberic or a vector. The second leg of a right triangle. 
-#'
-#' @return A numeric or a vector. The hypotenuse of the triangle. 
-#' @export
-#'
-#' @examples
-#' pythagoreanTheorem(a1 = 5, b1 = 3)
-pythagoreanTheorem <- function(a1, b1) {
-  c2 <- a1^2 + b1^2
-  c0 <- c2^(1/2) # could also use sqrt()
-  return(c0)
-}
 
-a <- c(5,3,10,4) 
-b <- c(3,5,10,20)
-pythagoreanTheorem(a1 = a, b1 = b)
 
 
 ## 1.2 Newton's Universal Law of Gravitation ---------------
@@ -100,31 +75,7 @@ pythagoreanTheorem(a1 = a, b1 = b)
 
 #***ANSWER--------------
 
-#' Calculate Newton's Universal Law of Gravitation
-#'
-#' @param G0 A numeric or a vector. The gravitational constant. The default is 6.67430*10^-11. 
-#' @param m_1 A numeric or a vector. Mass of the first object. 
-#' @param m_2 A numeric or a vector. Mass of the second object. 
-#' @param d2 A numeric or a vector. distance between centers of the masses. 
-#'
-#' @return A numeric or a vector. The force. 
-#' @export
-#'
-#' @examples
-#' NewtonGrav(m_1 = 5, m_2 = 3, d2 = 2)
-NewtonGrav <- function(G0 = 6.67430*10^-11, 
-                       m_1, 
-                       m_2, 
-                       d2){
-  
-  F1 = G0 * (m_1*m_2)/d2
-  
-  return(F1)
-}
 
-NewtonGrav(m_1 = 5, 
-           m_2 = 3, 
-           d2 = 2)
 
 ## 1.3 Area Swept (from our surveys!)---------------
 
@@ -144,20 +95,7 @@ NewtonGrav(m_1 = 5,
 
 #***ANSWER--------------
 
-#' Area Swept
-#'
-#' @param dist_fish A numeric or a vector. Distnace survey fished on this trip.
-#' @param net_width A numeric or a vector. Width of net.
-#'
-#' @return
-#' @export
-#'
-#' @examples area_swept(dist_fish = 2.77, net_width = 16.8)
-area_swept<-function(dist_fish, net_width) {
-  return((dist_fish * net_width)/10)
-}
 
-area_swept(dist_fish = 2.77, net_width = 16.8)
 
 ### ***1.3.2 Now we will apply this function to some real data! -----------
 # Here I've combined 
@@ -188,11 +126,9 @@ str(EBS_summary)
 
 
 #***ANSWER--------------
-EBS_summary$area_swept<-area_swept(dist_fish = EBS_summary$distance_fished, 
-                                   net_width = EBS_summary$net_width)
-summary(EBS_summary)
 
-str(EBS_summary)
+
+
 
 ## 1.4 Catch Per Unit Effort (CPUE) ----------------------
 
@@ -221,24 +157,4 @@ head(EBS_summary)
 
 #***ANSWER--------------
 
-#' Calculate CPUE of Survey
-#'
-#' @param dat A data.frame. This contains at least 3 headers named sum_weight, distance_fished, and net_width.  All 3 columns are A numeric or a vector. sum_weight is a numeric or a vector that represents the total weight of catch of a haul. dist_fished is the distnace survey fished on this trip and net_width and width of net.  
-#' @return A numeric or a data.frame of hauljoin and CPUE (kg/hect). 
-#' @export
-#'
-#' @examples
-#' CPUE0<-CPUE(dat)
-CPUE <- function(dat){
-  
-  CPUE0 <- dat %>% 
-    dplyr::group_by(hauljoin) %>%
-    dplyr::summarise(CPUE = (sum_weight/
-                               area_swept(dist_fish = distance_fished, 
-                                          net_width = net_width)))
-  
-  return(CPUE0)
-}
 
-CPUE0<-CPUE(dat = EBS_summary)
-head(CPUE0)
