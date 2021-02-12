@@ -143,7 +143,8 @@ str(EBS_summary)
 EBS_summary <- EBS %>% 
   dplyr::select(year, hauljoin, distance_fished, net_width, weight) %>%
   dplyr::group_by(year, hauljoin, # the real things we are summarizing by
-                  distance_fished, net_width) %>% # we want to keep these columns and they don't change by stratum and haul
+                  distance_fished, net_width) %>% 
+  # we want to keep these columns and they don't change by stratum and haul
   dplyr::summarise(sum_weight = sum(weight, na.rm = TRUE))
 
 head(EBS_summary)

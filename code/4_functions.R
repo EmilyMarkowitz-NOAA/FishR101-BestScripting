@@ -29,7 +29,8 @@ str(EBS_haul_table)
 
 #### Functions are made of 4 parts
 # Function Name
-    # This is the actual name of the function. It is stored in R environment as an object with this name.
+    # This is the actual name of the function. It is stored in R environment as 
+    # an object with this name.
 # Arguments
     # An argument is a placeholder. When a function is invoked, you pass a value 
     # to the argument. Arguments are optional; that is, a function may contain no 
@@ -48,17 +49,27 @@ function_name <-      # Name of function
   return(out)         # return outputs from the function body
 }                     # DONE, end of funciton body
 
-# NOTE the line breaks here mostly don't matter
+function_name(argument = 1) # Then the function is called with argument = 1
+                            # yields 1 because the out (the object returned) is 
+                            # assigned the value of the argument 
+
+# NOTE the line breaks here mostly don't matter. 
+# Here I added more line breaks than you'd typically see so I could 
+# clearly annotate each line. 
+
 # This is yields the same as above: 
 
 # probably how you will most often see them written out
 function_name <-function(argument) {
+  
     out<-argument
+  
     return(out)
 }
 
 # As does this, but harder to read, but works
 function_name <-function(argument) { out<-argument; return(out)} 
+function_name(argument = 1)
 # note that I used a line break ; to seperate the different parts of this statement
 
 
@@ -69,10 +80,9 @@ function_name<- function(argument){
   # function body
   argument # statement
 }
+function_name(argument = 1)
 
-# And then we can use this funciton as we would any other funciton
-function_name(1)
-  
+
 # function_name() is a simple function. If we needed to take a peek at the 
 # inner gears of function_name(), we can do that simply by calling the name 
 # of the function without adding the parentheses after it
@@ -113,15 +123,56 @@ environment(stringr::regex) # shows what package regex is coming from (text afte
 
 # Create your own functions --------------------------
 
-# What if we took that for loop from 2_for_loops.R and made that into a function?
-# Here is that loop again: 
+# *** A classic math equation---------------
+
+# Let's say that we want to create our own function for mean 
+# mean = the sum(a vector of numbers)/the number of numbers in that vector
+# aka if we: let x = a vector of numbers (e.g., c(1,2,3)), MEAN = sum(x)/length(x)
+
+# Note that I am naming this function MEAN because I don't want overwrite 
+# the base R function mean()
+x<-c(1,2,3)
+sum(x)
+length(x)
+MEAN <- sum(x)/length(x)
+MEAN
+
+# We know this is right because we can compare with the base R function mean()
+mean(x) # Wooo!
+
+# Now we want to make that into a function. Easy!
+# We know what goes in (x) and we know what we want to come out (MEAN) 
+# and we know how to get x to become the mean of x (MEAN = sum(x)/length(x)). 
+# Respectively, we've just defined the arguments, return, and body of the function!
+# Here is how I would write this function
+
+calc_mean <- function (x) {
+  MEAN <- sum(x)/length(x)
+  return(MEAN)
+}
+
+calc_mean(x) # nice job team!
+
+# Note that this is the same as writing: 
+calc_mean <- function (x) {
+  return(sum(x)/length(x)) 
+  # we don't acually need to need make a new variable in this case 
+  # because it's short and compact enough to fit in the return()
+}
+
+calc_mean(x)
 
 # *** Improving on Task 2 from 2_for_loops.R -> function! ---------------------------------
+
+# What if we took that for loop from 2_for_loops.R and made that into a function?
+# Here is that loop again: 
 
 # Lets say that we want to look at this data by year and by stratum to find out 
 # what the top 5 species are in each 
 
 # ****** loop from Example 2 in 2_for_loops.R ----------------------------
+
+
 
 # data manipulation
 
@@ -143,7 +194,7 @@ for (i in 1:nrow(unique_yr_strat)){
     dplyr::top_n(n = 5)
   
   max_5_spp<-rbind.data.frame(max_5_spp, 
-                              max_5_spp0[1:5,])
+                              max_5_spp0)
 }
 
 max_5_spp 
@@ -165,9 +216,9 @@ max5spp <- function (EBS_summary, yr, strat){
     dplyr::arrange(-WTCPUE_sum) %>%
     dplyr::top_n(n = 5)
   
-  return(max_5_spp0[1:5,])
+  return(max_5_spp0)
   # 1. same thing as writing:
-  # max_5_spp<-max_5_spp0[1:5,])
+  # max_5_spp<-max_5_spp0)
   # return(max_5_spp)
   
 }
@@ -177,6 +228,7 @@ max5spp(EBS_summary = EBS_summary,
           strat = 10) 
 # Wooooo! Short, sweet, and clean!
 
+# Loop from before:
 max_5_spp # same result!
 
 
@@ -204,7 +256,7 @@ max5spp <- function (EBS_summary, yr, strat){
     dplyr::arrange(-WTCPUE_sum) %>%
     dplyr::top_n(n = 5)
   
-  return(list("max_5_spp" = max_5_spp0[1:5,], 
+  return(list("max_5_spp" = max_5_spp0, 
               "EBS_summary" = EBS_summary, 
               "yr" = yr, 
               "strat" = strat))
@@ -213,6 +265,11 @@ max5spp <- function (EBS_summary, yr, strat){
 max5spp(EBS_summary = EBS_summary, 
         yr = 2016, 
         strat = 10) 
+
+# Note that we need to define each argument in this function 
+# (because, as we'll see in the next section, there are no argument defaults...)
+max5spp(EBS_summary = EBS_summary, 
+        strat = 10) # Error! We are missing the year argument
 
 # ***Default options in functions --------
 
@@ -235,7 +292,7 @@ max5spp <- function (EBS_summary,
     dplyr::arrange(-WTCPUE_sum) %>%
     dplyr::top_n(n = 5)
   
-  return(list("max_5_spp" = max_5_spp0[1:5,], 
+  return(list("max_5_spp" = max_5_spp0, 
               "EBS_summary" = EBS_summary, 
               "yr" = yr, 
               "strat" = strat))
@@ -257,13 +314,29 @@ max5spp(EBS_summary = EBS_summary,
 
 max5spp(strat = 10, 
         EBS_summary = EBS_summary,
-        yr = 2016) 
+        yr = 2016)
+
+max5spp(#strat = 10, 
+        EBS_summary = EBS_summary,
+        yr = 2016)
+#ERROR oh no!
+
 
 # Best Practices: using the roxygen skeleton ------------------
 
 # Now, let's talk about how to document our functions!
 # How would you document this? 
 
+#' Title
+#'
+#' @param EBS_summary 
+#' @param yr 
+#' @param strat 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 max5spp <- function (EBS_summary, yr, strat){ 
   max_5_spp0 <- EBS_summary %>%
     dplyr::filter(YEAR == yr, 
@@ -271,7 +344,7 @@ max5spp <- function (EBS_summary, yr, strat){
     dplyr::arrange(-WTCPUE_sum) %>%
     dplyr::top_n(n = 5)
   
-  return(max_5_spp0[1:5,])
+  return(max_5_spp0)
 }
 
 # I would document it like this: 
@@ -296,7 +369,7 @@ max5spp <- function (EBS_summary, yr, strat){
     dplyr::arrange(-WTCPUE_sum) %>%
     dplyr::top_n(n = 5)
   
-  return(max_5_spp0[1:5,])
+  return(max_5_spp0)
 }
 
 # Besides being incredibly helpful to future you as you try to figure out what you did, 
